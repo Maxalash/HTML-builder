@@ -5,15 +5,20 @@ const {stdin, stdout} = process;
 stdout.write('Hello checker!!!\nWrite into file: ');
 stdin.on('data', data=>{
     const text = data.toString();
-    fs.writeFile(
+    if (text.trim()==='exit') process.exit();
+    fs.appendFile(
         path.join(__dirname, 'text.txt'),
         text,
     
         (err) => {
             if (err) throw err;
-            console.log('Файл был создан');
-            process.exit();
         }
     );
 })
-
+process.on('SIGINT', function(){
+    process.exit();
+});
+process.on('exit',function(){
+    process.stdout.write('\nGoodbyr dear checker!! \n');
+    process.exit();
+})
