@@ -168,7 +168,6 @@ function listObjects1(path2) {
 listObjects1(path.join(__dirname, 'styles'));
 
 
-fsPromises.mkdir(path.join(copyTo, 'assets'), { recursive: true });
 function listObjects2(path2, path4) {
     fs.readdir(path2, (err, files) => {
         if (err) throw err;
@@ -198,4 +197,8 @@ function listObjects2(path2, path4) {
     });
 }
 
-listObjects2(path.join(__dirname, 'assets'), copyTo);
+const rmprom = fsPromises.rm(path.join(copyTo, 'assets'), { recursive: true, force:true })
+rmprom.then(() => {
+    fsPromises.mkdir(path.join(copyTo, 'assets'), { recursive: true });
+    listObjects2(path.join(__dirname, 'assets'), copyTo);
+})
