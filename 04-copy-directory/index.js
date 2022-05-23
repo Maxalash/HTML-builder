@@ -5,7 +5,7 @@ const path = require('path');
 const { stdin, stdout } = process;
 const copyFrom = path.join(__dirname, 'files');
 const copyTo = path.join(__dirname, 'files-copy');
-const rmprom = fsPromises.rmdir(copyTo, { recursive: true })
+const rmprom = fsPromises.rm(copyTo, { recursive: true, force:true })
 rmprom.then(() => {
     fsPromises.mkdir(copyTo, { recursive: true });
     function listObjects(path2) {
