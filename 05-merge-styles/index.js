@@ -6,6 +6,13 @@ const { stdin, stdout } = process;
 const copyFrom = path.join(__dirname, 'styles');
 const copyTo = path.join(__dirname, 'project-dist');
 fsPromises.mkdir(copyTo, { recursive: true });
+fs.writeFile(
+    path.join(copyTo, 'bundle.css'),
+    ' ',
+    (err) => {
+        if (err) throw err;
+    }
+)
 function listObjects(path2) {
     fs.readdir(path2, (err, files) => {
         if (err) throw err;
@@ -22,24 +29,26 @@ function listObjects(path2) {
                 if (stats.isDirectory()) {
                     listObjects(path1);
                 } else {
-                    try {
-                        fs.readFile(
-                            path.join(copyFrom, file),
-                            'utf-8',
-                            (err, data) => {
-                                if (err) throw err;
-
-                                fs.appendFile(
-                                    path.join(copyTo, 'bundle.css'),
-                                    data,
-                                    (err) => {
-                                        if (err) throw err;
-                                    }
-                                );
-                            }
-                        );
-                    } catch {
-                        console.log('The file could not be bundled');
+                    if (file.split('.')[1] == 'css') {
+                        try {
+                            
+                            fs.readFile(
+                                path.join(copyFrom, file),
+                                'utf-8',
+                                (err, data) => {
+                                    if (err) throw err;
+                                    fs.appendFile(
+                                        path.join(copyTo, 'bundle.css'),
+                                        data,
+                                        (err) => {
+                                            if (err) throw err;
+                                        }
+                                    );
+                                }
+                            );
+                        } catch {
+                            console.log('The file could not be bundled');
+                        }
                     }
                 }
             });
